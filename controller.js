@@ -6,6 +6,8 @@ import { dbBooks, dbOrders, dbUsers } from './db/db.js';
 
 import { ObjectId } from 'mongodb';
 
+import { validateBook, validateUser, validateOrder } from './utils/validators.js';
+
 
 export async function getElem(req, res) {
 
@@ -46,6 +48,7 @@ export async function createElem(req, res) {
 
   if (elemName === 'book') {
     const { bookName } = req.body;
+    validateBook({ bookName });
     const result = await dbBooks.insertOne(new Book(bookName));
 
 
@@ -54,15 +57,16 @@ export async function createElem(req, res) {
 
   if (elemName === 'user') {
     let {userName, userAge} = req.body;
-    userAge = Number(userAge);
+    validateUser({ name: userName, age: userAge });
 
-    const result = await dbUsers.insertOne(new User(userAge, userName));
+    const result = await dbUsers.insertOne(new User(userName, userAge));
 
     return res.status(201).json(result);
   }
 
   if (elemName === 'order') {
     const { orderArrProduct, orderDate} = req.body;
+    validateOrder({ orderArrProduct, orderDate });
     const result = await dbOrders.insertOne(new Order(orderArrProduct, orderDate));
 
     return res.status(201).json(result);
