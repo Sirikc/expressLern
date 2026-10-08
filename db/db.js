@@ -10,7 +10,7 @@ console.log('Connected to MongoDB');
 
 const db = client.db('expressLernDB');
 
-// Пользователь либо из /api/elements (name + age), либо из /api/auth/register (email + password)
+// Пользователь либо из /api/users (name + age), либо из /api/auth/register (email + password)
 const userSchema = {
   bsonType: 'object',
   anyOf: [

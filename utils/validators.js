@@ -1,5 +1,12 @@
+import { ObjectId } from 'mongodb';
+
+const isNumber = (value) => typeof value === 'number' && !Number.isNaN(value);
+const isString = (value) => typeof value === 'string';
+const isArray = (value) => Array.isArray(value);
+const isObject = (value) => typeof value === 'object' && value !== null && !Array.isArray(value);
+
 export function validatePassword(password) {
-  const regex = /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g
+  const regex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}$/;
 
   return regex.test(password);
 }
@@ -8,6 +15,14 @@ export function validateEmail(email) {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   return regex.test(email);
+}
+
+export function validateId(id) {
+  return ObjectId.isValid(id);
+}
+
+export function validateUpdateBody(body) {
+  return isObject(body) && Object.keys(body).length > 0 && !('_id' in body);
 }
 
 export function validateUser(user) {
